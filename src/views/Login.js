@@ -24,7 +24,8 @@ function Login() {
       })
       .then((res) => {
         console.log(res);
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("access", res.data.access);
+        localStorage.setItem("refresh", res.data.refresh);
       });
   };
 

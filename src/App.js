@@ -4,36 +4,39 @@ import axios from "axios";
 import { BASE_URL } from "./api/utils";
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [access, setAccess] = useState(localStorage.getItem("access"));
+  const [refresh, setRefresh] = useState(localStorage.getItem("refresh"));
   const [displayName, setDisplayName] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) {
+    if (access) {
       axios
         .get(`${BASE_URL}/v1/me`, {
           headers: {
-            Authorization: `${token}`,
+            Authorization: `Bearer ${access}`,
           },
         })
         .then((res) => setDisplayName(res.data.displayName))
         .catch((err) => {
           if (err.response.status === 401) {
-            localStorage.removeItem("token");
-            setToken(null);
+            localStorage.removeItem("access");
+            setAccess(null);
           }
         });
     }
-  }, [token]);
+  }, [access]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    setAccess(null);
+    setRefresh(null);
   };
 
   return (
     <div>
-      {token ? <h1>hello, {displayName}</h1> : <h1>simple react auth page</h1>}
+      {access ? <h1>hello, {displayName}</h1> : <h1>simple react auth page</h1>}
 
       <ol>
         <li>
